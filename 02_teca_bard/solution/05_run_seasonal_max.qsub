@@ -1,0 +1,40 @@
+#!/bin/bash
+### Job Name
+#PBS -N teca_yearly
+### Project code
+#PBS -A UUIB0003 
+#PBS -l walltime=00:15:00
+#PBS -q regular
+### Merge output and error files
+#PBS -j oe
+#PBS -k eod
+### Select 2 nodes with 36 CPUs each for a total of 72 MPI processes
+#PBS -l select=10:ncpus=36:mpiprocs=18:ompthreads=1
+### Send email on abort, begin and end
+##PBS -m abe
+### Specify mail recipient
+##PBS -M email_address
+
+# unload modules that conflict with teca
+module unload ncarenv
+module unload netcdf
+module swap intel gnu/12.1.0
+# load Travis's installation of TECA
+module use /glade/work/tobrien/software/cheyenne/install/superbuild/modulefiles/
+module load teca
+
+# create the output directory
+OUT_DIR=teca_bard_yearly
+mkdir -p $OUT_DIR
+
+### Run teca_metadata_probe
+mpiexec_mpt teca_temporal_reduction \
+	--input_regex teca_bard_daily/.*\.nc \
+	--interval yearly \
+	--operator maximum \
+	--point_arrays ar_wgtd_PRECT ar_probability \
+	--output_file ${OUT_DIR}/teca_bard.b.e21.BHISTsmbb.f09_g17.LE2-1251.020.cam.h2.annualmax.%t%.nc \
+	--file_layout yearly \
+	--verbose 1
+
+echo "Done."

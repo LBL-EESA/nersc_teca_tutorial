@@ -1,0 +1,31 @@
+#!/bin/bash
+### Job Name
+#PBS -N teca_custom
+### Project code
+#PBS -A UUIB0003 
+#PBS -l walltime=00:10:00
+#PBS -q regular
+### Merge output and error files
+#PBS -j oe
+#PBS -k eod
+### Select 1 nodes with 36 CPUs each for a total of 18 MPI processes and 1 thread (note: these aren't OpenMP threads)
+#PBS -l select=1:ncpus=36:mpiprocs=18:ompthreads=1
+### Send email on abort, begin and end
+##PBS -m abe
+### Specify mail recipient
+##PBS -M email_address
+
+# unload modules that conflict with teca
+module unload ncarenv
+module unload netcdf
+module swap intel gnu/12.1.0
+# load Travis's installation of TECA
+module use /glade/work/tobrien/software/cheyenne/install/superbuild/modulefiles/
+module load teca
+
+PYTHON=`which python3`
+
+### Run teca_metadata_probe
+mpiexec_mpt ${PYTHON} -u teca_spatial_subset.py
+
+echo "Done."

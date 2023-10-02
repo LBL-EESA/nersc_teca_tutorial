@@ -1,0 +1,4 @@
+*.nc
+*linked_files*
+*.o*
+*.out

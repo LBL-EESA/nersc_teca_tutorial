@@ -1,0 +1,27 @@
+# TECA multi cf reader config
+# Fri May 12 14:19:24 MDT 2023
+
+data_root = /global/cfs/cdirs/m1517/cascade/taobrien/nersc_teca_tutorial/01_teca_metadata/solution/linked_files
+
+z_axis_variable = plev
+
+[cf_reader]
+variables = hus
+regex = %data_root%/hus_6hrPlevPt_ECMWF-IFS-HR_highresSST-present_r1i1p1f1_gr_.*\.nc
+provides_time
+provides_geometry
+
+[cf_reader]
+variables = ua
+regex = %data_root%/ua_6hrPlevPt_ECMWF-IFS-HR_highresSST-present_r1i1p1f1_gr_.*\.nc
+
+[cf_reader]
+variables = va
+regex = %data_root%/va_6hrPlevPt_ECMWF-IFS-HR_highresSST-present_r1i1p1f1_gr_.*\.nc
+
+% note that time dimension is offset by +1 step relative to ua/va/hus; can't include this as-is 
+%[cf_reader]
+%variables = pr
+%regex = %data_root%/pr_Prim6hr_ECMWF-IFS-HR_highresSST-present_r1i1p1f1_gr_.*\.nc
+%z_axis_variable = ""
+%clamp_dimensions_of_one = 1
