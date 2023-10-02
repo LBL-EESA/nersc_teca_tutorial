@@ -33,10 +33,9 @@ This three-hour tutorial will roughly follow this outline:
 | 1       | 15 min | Lecture | Overview of TECA and its three main ways of being used |
 | 1       | 20 min | Lab | Use `teca_metadata_probe` to get the properties of a large netCDF dataset |
 | 1       | 15 min | Lab | Use `teca_cf_restripe` to subselect & rewrite a dataset |
-| 2       | 5 min | Lecture | A brief overview of the TECA Bayesian AR Detector, TECA BARD v1.0.1 |
-| 2       | 30 min | Lab | Apply `teca_bayesian_ar_detect` to extract precipitation associated with atmospheric rivers (AR) |
-| 2       | 20 min | Lab | Use `teca_temporal_reduce` to extract seasonal maximum AR precipitation |
-| 3       | 10 min | Lecture | TECA algorithms and using Python to create new TECA applications |
-| 3       | 30 min | Lab | Build a TECA app that extracts a spatial subset of AR precip seasonal max, renames variables, and writes to a new netCDF dataset |
-| 3       | 20 min | Lecture | Overview of process for writing TECA algorithms and information about learning more |
+| 2       | 10 min | Lecture | Custom TECA Python applications |
+| 2       | 50 min | Lab | Write and test `teca_heatwave_detect.py` |
+| 3       | 30 min | Lab | Continue work on `teca_heatwave_detect.py` |
+| 3       | 20 min | Lab | Use `teca_temporal_reduce` to generate composites of heatwave conditions |
+| 3       | 10 min | Discussion | Other options TECA applications |
 
