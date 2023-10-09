@@ -3,7 +3,7 @@
 ## What will I learn?
 The primary goal is that you come away from this tutorial inspired and enabled to use the [Toolkit for Extreme Climate Analysis (TECA)](https://teca.readthedocs.io/en/latest/?badge=latest#) in your own research.  Specifically, by the end of this tutorial, you will be able to:
 
-* apply existing TECA extremes detection tools to a climate dataset
+* apply existing TECA tools to a climate dataset
 * write a custom TECA application using Python
 * create a new TECA algorithm in Python
 
