@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+from mpi4py import MPI # initialize MPI before importing teca
+import teca
+from teca_heatwave_detect import teca_heatwave_detect
+
+# create the pipeline: reader -> heatwave detector -> table_reduce -> table_sort -> writer
+
+# create the reader
+reader = teca.teca_cf_reader.New()
+#reader.set_files_regex("era5_links/e5.oper.an.sfc.128_167_2t.ll025sc.2021.*\\.nc$") # run on only 2021 for the first test
+reader.set_files_regex("era5_links/e5.oper.an.sfc.128_167_2t.*\\.nc$")
+reader.set_x_axis_variable("longitude")
+reader.set_y_axis_variable("latitude")
+reader.set_verbose(1)
+head = reader
+
+# create the heatwave detector
+hwd = teca_heatwave_detect.New()
+hwd.set_input_connection(head.get_output_port()) # connect upstream
+hwd.set_verbose(True)
+head = hwd
+
+# create the table reducer
+tr = teca.teca_table_reduce.New()
+tr.set_thread_pool_size(1) # only one thread
+tr.set_input_connection(head.get_output_port()) # connect upstream
+tr.set_verbose(True)
+head = tr
+
+# create the table sorter
+ts = teca.teca_table_sort.New()
+ts.set_input_connection(head.get_output_port()) # connect upstream
+ts.set_index_column("time_index")
+head = ts
+
+# create the writer
+writer = teca.teca_table_writer.New()
+writer.set_input_connection(head.get_output_port()) # connect upstream
+writer.set_file_name("era5_heatwave_detect_%t%.csv")
+head = writer
+
+# run the pipeline
+head.update()

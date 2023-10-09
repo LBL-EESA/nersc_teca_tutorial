@@ -3,3 +3,5 @@
 *.o*
 *.out
 tutorial_live_solution/*
+era5_heatwave_detect_000000.csv
+__pycache__/teca_heatwave_detect.cpython-38.pyc

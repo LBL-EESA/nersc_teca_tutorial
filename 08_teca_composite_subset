@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+from mpi4py import MPI # initialize MPI before importing teca
+import teca
+import os
+import pathlib
+
+testing = True
+
+output_dir = pathlib.Path(os.environ["SCRATCH"]) / "nersc_teca_tutorial" / "pnw_heatwave_indices/ "
+
+# read the temporal index file on the root process
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+if rank == 0:
+    with open("era5_heatwave_detect_000000.csv", "r") as f:
+        indices = [int(x) for x in f.readlines()[5:]]
+
+    # also create the output directory
+    os.makedirs(output_dir, exist_ok=True)
+else:
+    indices = None
+# broadcast the indices to all processes
+indices = comm.bcast(indices, root=0)
+
+# create the pipeline: teca_multi_cf_reader -> teca_temporal_index_select -> teca_cartesian_mesh_subset -> teca_cf_writer
+
+# create the multi cf reader
+reader = teca.teca_multi_cf_reader.New()
+if testing:
+    mcf_file = "era5_combined_dataset_test.mcf"
+else:
+    mcf_file = "era5_combined_dataset.mcf"
+reader.set_input_file(mcf_file)
+reader.set_verbose(1)
+head = reader
+
+# create the temporal index selector
+tis = teca.teca_temporal_index_select.New()
+tis.set_input_connection(head.get_output_port()) # connect upstream
+tis.set_indices(indices)
+tis.set_verbose(1)
+head = tis
+
+# create the cartesian mesh subsetter
+cms = teca.teca_cartesian_mesh_subset.New()
+cms.set_input_connection(head.get_output_port()) # connect upstream
+# set the bounds to cover N. America
+cms.set_bounds(215,325,15,65,50,1000)
+head = cms
+
+# create the writer
+writer = teca.teca_cf_writer.New()
+writer.set_input_connection(head.get_output_port()) # connect upstream
+writer.set_file_name(str(output_dir / "era5_heatwave_times_PNW_%t%.nc"))
+if testing:
+    writer.set_first_step(0)
+    writer.set_last_step(0)
+head = writer
+
+# run the pipeline
+head.update()

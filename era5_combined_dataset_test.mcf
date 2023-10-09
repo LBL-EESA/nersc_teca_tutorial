@@ -1,0 +1,55 @@
+data_root = /global/cfs/cdirs/m1517/cascade/taobrien/nersc_teca_tutorial/era5_links
+regex = \.ll025..\.2021.*\.nc$
+
+x_axis_variable = longitude
+y_axis_variable = latitude
+z_axis_variable = level
+clamp_dimensions_of_one = 1
+
+[cf_reader]
+variables = T
+regex = %data_root%/.*128_130_t%regex%
+provides_time
+provides_geometry
+
+[cf_reader]
+variables = Z
+regex = %data_root%/.*128_129_z%regex%
+
+[cf_reader]
+variables = Q
+regex = %data_root%/.*128_133_q%regex%
+
+[cf_reader]
+variables = W
+regex = %data_root%/.*128_135_w%regex%
+
+[cf_reader]
+variables = VAR_2T
+regex = %data_root%/.*128_167_2t%regex%
+z_axis_variable = ""
+
+[cf_reader]
+variables = SP
+regex = %data_root%/.*128_134_sp%regex%
+z_axis_variable = ""
+
+[cf_reader]
+variables = TCW
+regex = %data_root%/.*128_136_tcw%regex%
+z_axis_variable = ""
+
+[cf_reader]
+variables = CAPE
+regex = %data_root%/.*128_059_cape%regex%
+z_axis_variable = ""
+
+[cf_reader]
+variables = VIWVE
+regex = %data_root%/.*162_071_viwve%regex%
+z_axis_variable = ""
+
+[cf_reader]
+variables = VIWVN
+regex = %data_root%/.*162_072_viwvn%regex%
+z_axis_variable = ""
