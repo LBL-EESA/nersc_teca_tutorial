@@ -1,4 +1,4 @@
-data_root = /global/cfs/cdirs/m1517/cascade/taobrien/nersc_teca_tutorial/01_teca_metadata/solution/era5_links
+data_root = /global/cfs/cdirs/m1517/cascade/taobrien/nersc_teca_tutorial/era5_links
 regex = \.ll025.*\.nc$
 
 x_axis_variable = longitude
